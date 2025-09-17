@@ -254,7 +254,7 @@ typedef struct _pthread_data_t {
 } pthread_data_t;
 
 typedef struct _ftrace_data_t {
-	char *debugfs;
+	char *tracefs;
 	int trace_fd;
 	int marker_fd;
 } ftrace_data_t;

@@ -21,6 +21,21 @@ AC_CHECK_FUNCS(sched_setattr, [have_sched_settattr=yes], [have_sched_settattr=no
 
 AM_CONDITIONAL([SET_DLSCHED], [test "x$have_sched_settattr" = xno])
 
+AC_ARG_WITH([debugfs], AS_HELP_STRING([--with-debugfs], [use debugfs for tracing]))
+
+if test "x$with_debugfs" = "xyes"; then
+	rtapp_tracefs_path="/sys/kernel/debug/tracing"
+elif test "x$cross_compiling" = "xyes"; then
+	rtapp_tracefs_path="/sys/kernel/tracing"
+else
+	if test -d "/sys/kernel/debug/tracing" && ! test -d "/sys/kernel/tracing"; then
+		rtapp_tracefs_path="/sys/kernel/debug/tracing"
+	else
+		rtapp_tracefs_path="/sys/kernel/tracing"
+	fi
+fi
+AC_DEFINE_UNQUOTED([TRACEFS_PATH], ["$rtapp_tracefs_path"], [Path to tracefs directory])
+
 AC_ARG_VAR([LOGLVL], [verbosity level, from 0 to 100. 100 is very verbose])
 
 if test -z "${LOGLVL}";then
